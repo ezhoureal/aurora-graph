@@ -9,8 +9,8 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import EffectNode from "./components/EffectNode";
-import { paletteItems } from "./blocks/palette";
 import { useGraphStore } from "./store/useGraphStore";
+import { templateItems } from "./template/registry";
 
 const nodeTypes = {
   effect: EffectNode,
@@ -21,7 +21,7 @@ const dragMimeType = "application/aurora-graph-node";
 function App() {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const { screenToFlowPosition } = useReactFlow();
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, addNodeFromPalette } =
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, addNodeFromPalette, graphJson } =
     useGraphStore();
 
   const onDragStart = useCallback((event: DragEvent<HTMLButtonElement>, type: string) => {
@@ -67,7 +67,7 @@ function App() {
         </div>
 
         <div className="palette-list">
-          {paletteItems.map((item) => (
+          {templateItems.map((item) => (
             <button
               key={item.type}
               className="palette-card"
@@ -82,6 +82,14 @@ function App() {
             </button>
           ))}
         </div>
+
+        <section className="graph-export">
+          <div className="graph-export-header">
+            <span className="eyebrow">Live JSON</span>
+            <p>Canonical DAG snapshot exported straight from the model layer.</p>
+          </div>
+          <pre className="graph-export-code">{graphJson}</pre>
+        </section>
       </aside>
 
       <section className="canvas-shell">

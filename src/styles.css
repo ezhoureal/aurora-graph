@@ -23,11 +23,12 @@ html,
 body,
 #root {
   margin: 0;
-  min-height: 100%;
+  height: 100%;
 }
 
 body {
   min-height: 100vh;
+  overflow: hidden;
 }
 
 button,
@@ -40,14 +41,17 @@ select {
 .app-shell {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-height: 0;
   padding: 2rem 1.25rem;
+  overflow: hidden;
   background: rgba(4, 10, 20, 0.78);
   backdrop-filter: blur(18px);
   border-right: 1px solid rgba(148, 163, 184, 0.16);
@@ -79,8 +83,47 @@ select {
 }
 
 .palette-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   display: grid;
   gap: 0.9rem;
+  padding-right: 0.35rem;
+}
+
+.graph-export {
+  flex-shrink: 0;
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 20px;
+  background: rgba(8, 15, 28, 0.8);
+}
+
+.graph-export-header {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.graph-export-header p {
+  margin: 0;
+  color: #94a3b8;
+  line-height: 1.45;
+}
+
+.graph-export-code {
+  overflow: auto;
+  max-height: 24rem;
+  margin: 0;
+  padding: 0.9rem;
+  border-radius: 16px;
+  background: rgba(2, 6, 23, 0.76);
+  color: #cbd5e1;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .palette-card {
@@ -132,10 +175,12 @@ select {
 
 .canvas-shell {
   padding: 1rem;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .canvas-frame {
-  height: calc(100vh - 2rem);
+  height: 100%;
   overflow: hidden;
   border: 1px solid rgba(125, 211, 252, 0.16);
   border-radius: 28px;
@@ -159,6 +204,29 @@ select {
   background: rgba(8, 15, 28, 0.75);
   border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: 18px;
+}
+
+.react-flow__controls {
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  background: rgba(8, 15, 28, 0.9);
+  box-shadow: 0 16px 30px rgba(2, 6, 23, 0.28);
+}
+
+.react-flow__controls-button {
+  border-bottom-color: rgba(148, 163, 184, 0.16);
+  background: rgba(8, 15, 28, 0.92);
+  color: #e2e8f0;
+}
+
+.react-flow__controls-button:hover {
+  background: rgba(15, 23, 42, 0.96);
+}
+
+.react-flow__controls-button svg {
+  fill: currentColor;
+  stroke: currentColor;
 }
 
 .effect-node {
@@ -338,5 +406,9 @@ select {
   .canvas-frame {
     height: 70vh;
     border-radius: 0 0 28px 28px;
+  }
+
+  .graph-export-code {
+    max-height: 14rem;
   }
 }

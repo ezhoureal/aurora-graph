@@ -1,11 +1,11 @@
 import { memo, type ChangeEvent } from "react";
 import { Handle, NodeProps, Position } from "reactflow";
 import { useGraphStore } from "../store/useGraphStore";
-import type { PaletteItem, PortKind } from "../blocks/palette";
+import type { PortKind, TemplateDefinition } from "../template/registry";
 
 export interface EffectNodeData {
-  definition: PaletteItem;
-  parameters: Record<string, number>;
+  definition: TemplateDefinition;
+  properties: Record<string, number>;
 }
 
 const kindToClass: Record<PortKind, string> = {
@@ -15,7 +15,7 @@ const kindToClass: Record<PortKind, string> = {
 };
 
 function EffectNode({ id, data, selected }: NodeProps<EffectNodeData>) {
-  const { definition, parameters } = data;
+  const { definition, properties } = data;
   const updateNodeParameter = useGraphStore((state) => state.updateNodeParameter);
   const parameterIds = new Set(definition.parameters.map((parameter) => parameter.id));
   const visibleInputs = definition.inputs.filter((input) => !parameterIds.has(input.id));
@@ -80,7 +80,7 @@ function EffectNode({ id, data, selected }: NodeProps<EffectNodeData>) {
           >
             <span className="effect-node-column-label">Parameters</span>
             {definition.parameters.map((parameter) => {
-              const value = parameters[parameter.id] ?? parameter.defaultValue;
+              const value = properties[parameter.id] ?? parameter.defaultValue;
 
               return (
                 <label className="parameter-row nodrag nopan" key={parameter.id}>

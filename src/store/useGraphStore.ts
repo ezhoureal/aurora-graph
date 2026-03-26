@@ -1,24 +1,23 @@
-import {
-  addEdge,
-  applyEdgeChanges,
-  applyNodeChanges,
-  type Connection,
-  type Edge,
-  type EdgeChange,
-  type Node,
-  type NodeChange,
-  type XYPosition,
-} from "reactflow";
+import type { Connection, EdgeChange, NodeChange, XYPosition } from "reactflow";
 import { create } from "zustand";
-import { paletteByType, type PaletteItem } from "../blocks/palette";
-import type { EffectNodeData } from "../components/EffectNode";
-
-type GraphNode = Node<EffectNodeData>;
-type NodeParameters = Record<string, number>;
+import {
+  applyEdgeChanges as applyDagEdgeChanges,
+  applyNodeChanges as applyDagNodeChanges,
+  connectNodes,
+  createGraph,
+  createGraphSnapshot,
+  createNodeRecord,
+  createViewModel,
+  updateNodeProperty,
+  type DagGraph,
+} from "../model/dag";
+import { templateByType } from "../template/registry";
 
 interface GraphState {
-  nodes: GraphNode[];
-  edges: Edge[];
+  graph: DagGraph;
+  nodes: ReturnType<typeof createViewModel>["nodes"];
+  edges: ReturnType<typeof createViewModel>["edges"];
+  graphJson: string;
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
   onConnect: (connection: Connection) => void;
@@ -26,92 +25,80 @@ interface GraphState {
   updateNodeParameter: (nodeId: string, parameterId: string, value: number) => void;
 }
 
-const initialNodes: GraphNode[] = [
-  createNode(paletteByType["source.image"], { x: 120, y: 160 }, "node-1"),
-  createNode(paletteByType["fx.brightness"], { x: 420, y: 150 }, "node-2"),
-];
+const initialGraph = createGraph();
 
-const initialEdges: Edge[] = [
-  {
-    id: "edge-node-1-node-2",
-    source: "node-1",
-    target: "node-2",
-    sourceHandle: "image",
-    targetHandle: "image",
-    animated: true,
-    style: { strokeWidth: 2 },
-  },
-];
-
-function createNode(
-  definition: PaletteItem,
-  position: XYPosition,
-  id: string = crypto.randomUUID(),
-): GraphNode {
-  const parameters: NodeParameters = Object.fromEntries(
-    definition.parameters.map((parameter) => [parameter.id, parameter.defaultValue]),
-  );
+function syncGraph(graph: DagGraph, graphJson: string) {
+  const viewModel = createViewModel(graph);
 
   return {
-    id,
-    type: "effect",
-    position,
-    data: {
-      definition,
-      parameters,
-    },
+    graph,
+    nodes: viewModel.nodes,
+    edges: viewModel.edges,
+    graphJson,
   };
 }
 
+function syncGraphIfChanged(currentGraph: DagGraph, nextGraph: DagGraph, shouldExportJson: boolean) {
+  if (nextGraph === currentGraph) {
+    return undefined;
+  }
+
+  const nextGraphJson = shouldExportJson ? createGraphSnapshot(nextGraph) : createGraphSnapshot(currentGraph);
+
+  return syncGraph(nextGraph, nextGraphJson);
+}
+
 export const useGraphStore = create<GraphState>((set) => ({
-  nodes: initialNodes,
-  edges: initialEdges,
+  ...syncGraph(initialGraph, createGraphSnapshot(initialGraph)),
   onNodesChange: (changes) =>
-    set((state) => ({
-      nodes: applyNodeChanges(changes, state.nodes),
-    })),
+    set((state) => {
+      const shouldExportJson = changes.some((change) => change.type === "remove");
+      const nextState = syncGraphIfChanged(
+        state.graph,
+        applyDagNodeChanges(state.graph, changes),
+        shouldExportJson,
+      );
+      return nextState ?? state;
+    }),
   onEdgesChange: (changes) =>
-    set((state) => ({
-      edges: applyEdgeChanges(changes, state.edges),
-    })),
+    set((state) => {
+      const nextState = syncGraphIfChanged(state.graph, applyDagEdgeChanges(state.graph, changes), false);
+      return nextState ?? state;
+    }),
   onConnect: (connection) =>
-    set((state) => ({
-      edges: addEdge(
-        {
-          ...connection,
-          id: `edge-${connection.source}-${connection.target}-${crypto.randomUUID()}`,
-          animated: true,
-          style: { strokeWidth: 2 },
-        },
-        state.edges,
-      ),
-    })),
+    set((state) => {
+      const nextState = syncGraphIfChanged(state.graph, connectNodes(state.graph, connection), true);
+      return nextState ?? state;
+    }),
   addNodeFromPalette: (type, position) => {
-    const definition = paletteByType[type];
+    const definition = templateByType[type];
 
     if (!definition) {
       return;
     }
 
-    set((state) => ({
-      nodes: [...state.nodes, createNode(definition, position)],
-    }));
+    set((state) => {
+      const node = createNodeRecord(definition, position);
+
+      const nextGraph = {
+        ...state.graph,
+        nodeOrder: [...state.graph.nodeOrder, node.id],
+        nodes: {
+          ...state.graph.nodes,
+          [node.id]: node,
+        },
+      };
+
+      return syncGraph(nextGraph, createGraphSnapshot(nextGraph));
+    });
   },
   updateNodeParameter: (nodeId, parameterId, value) =>
-    set((state) => ({
-      nodes: state.nodes.map((node) =>
-        node.id === nodeId
-          ? {
-              ...node,
-              data: {
-                ...node.data,
-                parameters: {
-                  ...node.data.parameters,
-                  [parameterId]: value,
-                },
-              },
-            }
-          : node,
-      ),
-    })),
+    set((state) => {
+      const nextState = syncGraphIfChanged(
+        state.graph,
+        updateNodeProperty(state.graph, nodeId, parameterId, value),
+        false,
+      );
+      return nextState ?? state;
+    }),
 }));
