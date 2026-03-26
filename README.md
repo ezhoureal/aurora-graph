@@ -20,3 +20,9 @@ This is the "Source of Truth." It maintains the Directed Acyclic Graph (DAG) str
 
 ## Layer 3: Transpiler and Previewer
 Translate the JSON nodes and their connections into concrete ETS code that is HarmonyOS-native. The HarmonyOS UI previewer is integrated here to run the ETS code and provide feedback to the designer.
+
+
+## Development
+Run `npm install`.
+If your download gets stuck, it's usually a network issue when installing Electron. Try `ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ npm install`
+Then, refer to `package.json` to run locally.
