@@ -1,0 +1,73 @@
+{
+  "type": "mask.createWaveGradientMask",
+  "label": "Wave Gradient Mask",
+  "category": "Mask Source",
+  "description": "Create a Mask of single wave gradient.",
+  "accent": "#f472b6",
+  "inputs": [],
+  "outputs": [
+    {
+      "id": "mask",
+      "label": "Mask",
+      "kind": "mask"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "center",
+      "label": "Center",
+      "optional": false,
+      "description": "- The wave source center of the single-wave mask.",
+      "kind": "point2d",
+      "defaultValue": {
+        "x": 0,
+        "y": 0
+      },
+      "shape": "common2D.Point"
+    },
+    {
+      "id": "width",
+      "label": "Width",
+      "optional": false,
+      "description": "- The circular ring width of the single-wave mask.",
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    },
+    {
+      "id": "propagationRadius",
+      "label": "Propagation Radius",
+      "optional": false,
+      "description": "- The outer diffusion radius of the single-wave mask.",
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    },
+    {
+      "id": "blurRadius",
+      "label": "Blur Radius",
+      "optional": false,
+      "description": "- The blur radius of the single-wave mask.",
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    },
+    {
+      "id": "turbulenceStrength",
+      "label": "Turbulence Strength",
+      "optional": true,
+      "description": "- The turbulent displacement intensity of the single-wave mask.",
+      "kind": "number",
+      "defaultValue": 0,
+      "min": -1,
+      "max": 1,
+      "step": 0.01
+    }
+  ]
+}

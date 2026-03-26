@@ -1,0 +1,58 @@
+{
+  "type": "mask.createRippleMask",
+  "label": "Ripple Mask",
+  "category": "Mask Source",
+  "description": "Create a Mask of ripple.",
+  "accent": "#f472b6",
+  "inputs": [],
+  "outputs": [
+    {
+      "id": "mask",
+      "label": "Mask",
+      "kind": "mask"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "center",
+      "label": "Center",
+      "optional": false,
+      "kind": "point2d",
+      "defaultValue": {
+        "x": 0,
+        "y": 0
+      },
+      "shape": "common2D.Point"
+    },
+    {
+      "id": "radius",
+      "label": "Radius",
+      "optional": false,
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    },
+    {
+      "id": "width",
+      "label": "Width",
+      "optional": false,
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    },
+    {
+      "id": "offset",
+      "label": "Offset",
+      "optional": true,
+      "kind": "number",
+      "defaultValue": 0,
+      "min": -1,
+      "max": 1,
+      "step": 0.01
+    }
+  ]
+}

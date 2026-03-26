@@ -24,6 +24,7 @@ if (!namespaceDeclaration || !namespaceDeclaration.body || !ts.isModuleBlock(nam
 
 const interfaceMap = new Map();
 const enumMap = new Map();
+const classMap = new Map();
 
 for (const statement of namespaceDeclaration.body.statements) {
   if (ts.isInterfaceDeclaration(statement)) {
@@ -35,6 +36,10 @@ for (const statement of namespaceDeclaration.body.statements) {
       statement.name.text,
       statement.members.map((member) => member.name.getText(sourceFile)),
     );
+  }
+
+  if (ts.isClassDeclaration(statement) && statement.name) {
+    classMap.set(statement.name.text, statement);
   }
 }
 
@@ -58,14 +63,17 @@ enumMap.set("GradientDirection", [
 
 const filterInterface = interfaceMap.get("Filter");
 const visualEffectInterface = interfaceMap.get("VisualEffect");
+const maskClass = classMap.get("Mask");
 
-if (!filterInterface || !visualEffectInterface) {
-  throw new Error("Could not find Filter and VisualEffect interfaces.");
+if (!filterInterface || !visualEffectInterface || !maskClass) {
+  throw new Error("Could not find Filter, VisualEffect, and Mask declarations.");
 }
 
 await fs.mkdir(outputDir, { recursive: true });
+await removePreviouslyGeneratedTemplates(outputDir);
 
 const templates = [
+  ...createTemplatesFromMaskClass(maskClass, "mask", "Mask Source", "#f472b6"),
   ...createTemplatesFromInterface(filterInterface, "filter", "Filter", "#38bdf8"),
   ...createTemplatesFromInterface(visualEffectInterface, "effect", "Visual Effect", "#22c55e"),
 ];
@@ -104,6 +112,51 @@ function createTemplatesFromInterface(interfaceNode, typePrefix, category, accen
           ),
       };
     });
+}
+
+function createTemplatesFromMaskClass(classNode, typePrefix, category, accent) {
+  const allowedNames = new Set([
+    "createRippleMask",
+    "createPixelMapMask",
+    "createRadialGradientMask",
+    "createWaveGradientMask",
+  ]);
+
+  const methodsByName = new Map();
+
+  for (const member of classNode.members
+    .filter(
+      (member) =>
+        ts.isMethodDeclaration(member) &&
+        hasStaticKeyword(member) &&
+        member.name &&
+        ts.isIdentifier(member.name),
+    )) {
+    const name = member.name.text;
+
+    if (!allowedNames.has(name)) {
+      continue;
+    }
+
+    const current = methodsByName.get(name);
+
+    if (!current || member.parameters.length > current.parameters.length) {
+      methodsByName.set(name, member);
+    }
+  }
+
+  return [...methodsByName.values()].map((member) => ({
+      type: `${typePrefix}.${member.name.text}`,
+      label: toTitle(member.name.text.replace(/^create/, "")),
+      category,
+      description: getSummary(member) || `${toTitle(member.name.text)} from HarmonyOS uiEffect.Mask.`,
+      accent,
+      inputs: [],
+      outputs: [{ id: "mask", label: "Mask", kind: "mask" }],
+      parameters: member.parameters.map((parameter) =>
+        mapParameter(parameter, getParamDescription(member, parameter.name.getText(sourceFile))),
+      ),
+    }));
 }
 
 function mapParameter(parameter, description) {
@@ -169,6 +222,24 @@ function mapParameter(parameter, description) {
       kind: "color",
       defaultValue: { red: 1, green: 1, blue: 1, alpha: 1 },
       shape: typeText,
+    };
+  }
+
+  if (typeText === "common2D.Rect") {
+    return {
+      ...base,
+      kind: "object",
+      defaultValue: { left: 0, top: 0, right: 0, bottom: 0 },
+      shape: "common2D.Rect",
+    };
+  }
+
+  if (typeText === "image.PixelMap") {
+    return {
+      ...base,
+      kind: "object",
+      defaultValue: {},
+      shape: "image.PixelMap",
     };
   }
 
@@ -295,6 +366,10 @@ function defaultValueForType(typeText, seen) {
     return { x: 0, y: 0, z: 0 };
   }
 
+  if (typeText === "common2D.Rect") {
+    return { left: 0, top: 0, right: 0, bottom: 0 };
+  }
+
   if (typeText === "Color" || typeText === "common2D.Color") {
     return { red: 1, green: 1, blue: 1, alpha: 1 };
   }
@@ -317,6 +392,26 @@ function defaultValueForType(typeText, seen) {
   }
 
   return null;
+}
+
+function hasStaticKeyword(node) {
+  return node.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.StaticKeyword) ?? false;
+}
+
+async function removePreviouslyGeneratedTemplates(directory) {
+  const entries = await fs.readdir(directory, { withFileTypes: true });
+
+  for (const entry of entries) {
+    if (!entry.isFile() || !entry.name.endsWith(".json")) {
+      continue;
+    }
+
+    if (!/^(filter|effect|mask)\./.test(entry.name)) {
+      continue;
+    }
+
+    await fs.unlink(path.join(directory, entry.name));
+  }
 }
 
 function normalizeType(typeText) {

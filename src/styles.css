@@ -444,15 +444,33 @@ select {
 .parameter-grid,
 .parameter-color-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   gap: 0.6rem;
+}
+
+.parameter-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.parameter-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.parameter-color-grid {
+  grid-template-columns: minmax(0, 1.45fr) minmax(5.25rem, 0.75fr);
+  align-items: end;
 }
 
 .parameter-subfield {
   display: grid;
+  min-width: 0;
   gap: 0.35rem;
   font-size: 0.78rem;
   color: #94a3b8;
+}
+
+.parameter-subfield-color,
+.parameter-subfield-alpha {
+  align-self: stretch;
 }
 
 .parameter-slider {
@@ -482,6 +500,24 @@ select {
   color: #e2e8f0;
 }
 
+.parameter-textarea {
+  width: 100%;
+  min-height: 7.5rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  background: rgba(2, 6, 23, 0.72);
+  color: #e2e8f0;
+  resize: vertical;
+  font-family:
+    "SFMono-Regular",
+    "JetBrains Mono",
+    "Fira Code",
+    monospace;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
 .parameter-toggle {
   width: 2.75rem;
   height: 1.5rem;
@@ -491,11 +527,27 @@ select {
 
 .parameter-color-picker {
   width: 100%;
-  min-height: 2.4rem;
-  padding: 0;
+  height: 2.4rem;
+  padding: 0.22rem;
   border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 12px;
   background: rgba(2, 6, 23, 0.72);
+  cursor: pointer;
+}
+
+.parameter-color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.parameter-color-picker::-webkit-color-swatch {
+  border: none;
+  border-radius: 8px;
+}
+
+.parameter-input,
+.parameter-select,
+.parameter-color-picker {
+  width: 100%;
 }
 
 .parameter-slider:focus-visible {
@@ -573,5 +625,12 @@ select {
 
   .graph-export-code {
     max-height: 14rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .parameter-color-grid,
+  .parameter-grid-3 {
+    grid-template-columns: 1fr;
   }
 }

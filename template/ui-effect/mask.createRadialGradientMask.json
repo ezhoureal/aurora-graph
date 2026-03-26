@@ -1,0 +1,56 @@
+{
+  "type": "mask.createRadialGradientMask",
+  "label": "Radial Gradient Mask",
+  "category": "Mask Source",
+  "description": "Create a Mask of radial gradient.",
+  "accent": "#f472b6",
+  "inputs": [],
+  "outputs": [
+    {
+      "id": "mask",
+      "label": "Mask",
+      "kind": "mask"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "center",
+      "label": "Center",
+      "optional": false,
+      "kind": "point2d",
+      "defaultValue": {
+        "x": 0,
+        "y": 0
+      },
+      "shape": "common2D.Point"
+    },
+    {
+      "id": "radiusX",
+      "label": "Radius X",
+      "optional": false,
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    },
+    {
+      "id": "radiusY",
+      "label": "Radius Y",
+      "optional": false,
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    },
+    {
+      "id": "gradients",
+      "label": "Gradients",
+      "optional": false,
+      "kind": "tupleArray",
+      "defaultValue": [],
+      "shape": "Array<[double, double]>"
+    }
+  ]
+}

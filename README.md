@@ -7,6 +7,7 @@ A drag-and-drop design tool for visual effects, producing ready-to-run UI for Ha
 The tool is built in three layers:
 ## Layer 1: UI
 cross-platform UI that allows users to create effect node graphs -- drag and drop, make connections, adjust parameters with slider, etc. The UI is based on ReactFlow and Zustand in Typescript, and the left sidebar is populated from JSON-backed HarmonyOS effect templates at startup.
+Effect node parameter controls use type-specific inline layouts so compact editors such as colors and 2D/3D points stay readable inside narrow node cards.
 
 ## Layer 2: Graph Model
 This is the "Source of Truth." It maintains the Directed Acyclic Graph (DAG) structure.
@@ -14,7 +15,7 @@ This is the "Source of Truth." It maintains the Directed Acyclic Graph (DAG) str
 - Responsibility: Validating connections, preventing cycles, managing parameter serialization, and handling the "Registry" of available component blocks.
 
 - Data Structure: A flat object keyed by node ID, where each node stores its metadata, type-specific property values, and explicit parent/child connection references.
-- Template Source: Preset node templates live as JSON files in `/template/ui-effect` and are auto-loaded through a typed registry module on app startup, including the image source node used to feed HarmonyOS effects.
+- Template Source: Preset node templates live as JSON files in `/template/ui-effect` and are auto-loaded through a typed registry module on app startup. We use a script to auto-generate these templates from HarmonyOS SDK declaration.
 - Template Schema: HarmonyOS effect templates keep only `image` and `mask` ports. Parameter fields still support numeric, boolean, enum, tuple, point, color, and nested object data, while `mask` dependencies are modeled as input ports so users can wire separate mask nodes into effect nodes.
 - Export: The canonical DAG is serialized to JSON after structural edits (node add/remove and new connections) for inspection and downstream transpilation.
 - UI Projection: ReactFlow node and edge arrays are derived from the canonical DAG rather than being the source of truth.

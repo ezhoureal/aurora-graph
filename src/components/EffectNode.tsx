@@ -53,9 +53,42 @@ function EffectNode({ id, data, selected }: NodeProps<EffectNodeData>) {
     (parameter): parameter is Extract<TemplateParameter, { kind: "point2d" | "point3d" }> =>
       parameter.kind === "point2d" || parameter.kind === "point3d",
   );
+  const numberTupleParameters = definition.parameters.filter(
+    (parameter): parameter is Extract<TemplateParameter, { kind: "numberTuple" }> =>
+      parameter.kind === "numberTuple",
+  );
+  const numberArrayParameters = definition.parameters.filter(
+    (parameter): parameter is Extract<TemplateParameter, { kind: "numberArray" }> =>
+      parameter.kind === "numberArray",
+  );
+  const pointArrayParameters = definition.parameters.filter(
+    (parameter): parameter is Extract<TemplateParameter, { kind: "pointArray" }> =>
+      parameter.kind === "pointArray",
+  );
+  const tupleArrayParameters = definition.parameters.filter(
+    (parameter): parameter is Extract<TemplateParameter, { kind: "tupleArray" }> =>
+      parameter.kind === "tupleArray",
+  );
+  const objectParameters = definition.parameters.filter(
+    (parameter): parameter is Extract<TemplateParameter, { kind: "object" }> =>
+      parameter.kind === "object",
+  );
   const nonEditableParameters = definition.parameters.filter(
     (parameter) =>
-      !["number", "boolean", "enum", "string", "color", "point2d", "point3d"].includes(parameter.kind),
+      ![
+        "number",
+        "boolean",
+        "enum",
+        "string",
+        "color",
+        "point2d",
+        "point3d",
+        "numberTuple",
+        "numberArray",
+        "pointArray",
+        "tupleArray",
+        "object",
+      ].includes(parameter.kind),
   );
 
   return (
@@ -232,19 +265,22 @@ function EffectNode({ id, data, selected }: NodeProps<EffectNodeData>) {
                     <span className="parameter-badge">color</span>
                   </div>
                   <div className="parameter-color-grid">
-                    <input
-                      className="parameter-color-picker nodrag nopan"
-                      type="color"
-                      value={rgbaToHex(value)}
-                      onChange={(event) =>
-                        updateNodeParameter(id, parameter.id, {
-                          ...hexToColor(event.currentTarget.value),
-                          alpha: value.alpha,
-                        })
-                      }
-                    />
-                    <label className="parameter-subfield">
-                      <span>A</span>
+                    <label className="parameter-subfield parameter-subfield-color">
+                      <span>Color</span>
+                      <input
+                        className="parameter-color-picker nodrag nopan"
+                        type="color"
+                        value={rgbaToHex(value)}
+                        onChange={(event) =>
+                          updateNodeParameter(id, parameter.id, {
+                            ...hexToColor(event.currentTarget.value),
+                            alpha: value.alpha,
+                          })
+                        }
+                      />
+                    </label>
+                    <label className="parameter-subfield parameter-subfield-alpha">
+                      <span>Alpha</span>
                       <input
                         className="parameter-input nodrag nopan"
                         max={1}
@@ -255,7 +291,7 @@ function EffectNode({ id, data, selected }: NodeProps<EffectNodeData>) {
                         onChange={(event) =>
                           updateNodeParameter(id, parameter.id, {
                             ...value,
-                            alpha: Number(event.currentTarget.value),
+                            alpha: clamp(Number(event.currentTarget.value), 0, 1),
                           })
                         }
                       />
@@ -276,7 +312,11 @@ function EffectNode({ id, data, selected }: NodeProps<EffectNodeData>) {
                     <span>{parameter.label}</span>
                     <span className="parameter-badge">{parameter.kind}</span>
                   </div>
-                  <div className="parameter-grid">
+                  <div
+                    className={`parameter-grid ${
+                      parameter.kind === "point3d" ? "parameter-grid-3" : "parameter-grid-2"
+                    }`}
+                  >
                     {Object.entries(value).map(([axis, axisValue]) => (
                       <label className="parameter-subfield" key={axis}>
                         <span>{axis.toUpperCase()}</span>
@@ -296,6 +336,126 @@ function EffectNode({ id, data, selected }: NodeProps<EffectNodeData>) {
                     ))}
                   </div>
                 </div>
+              );
+            })}
+            {numberTupleParameters.map((parameter) => {
+              const tuple = normalizeNumberTuple(properties[parameter.id], parameter.defaultValue);
+
+              return (
+                <div className="parameter-row nodrag nopan" key={parameter.id}>
+                  <div className="parameter-label-row">
+                    <span>{parameter.label}</span>
+                    <span className="parameter-badge">tuple</span>
+                  </div>
+                  <div className="parameter-grid">
+                    {tuple.map((entry, index) => (
+                      <label className="parameter-subfield" key={index}>
+                        <span>{index + 1}</span>
+                        <input
+                          className="parameter-input nodrag nopan"
+                          step={0.01}
+                          type="number"
+                          value={entry}
+                          onChange={(event) => {
+                            const nextTuple = [...tuple];
+                            nextTuple[index] = Number(event.currentTarget.value);
+                            updateNodeParameter(id, parameter.id, nextTuple);
+                          }}
+                        />
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+            {numberArrayParameters.map((parameter) => {
+              const values = normalizeNumberArray(properties[parameter.id], parameter.defaultValue);
+
+              return (
+                <label className="parameter-row nodrag nopan" key={parameter.id}>
+                  <div className="parameter-label-row">
+                    <span>{parameter.label}</span>
+                    <span className="parameter-badge">numbers</span>
+                  </div>
+                  <input
+                    className="parameter-input nodrag nopan"
+                    defaultValue={values.join(", ")}
+                    placeholder="0, 10, 20"
+                    type="text"
+                    onBlur={(event) =>
+                      updateNodeParameter(id, parameter.id, parseNumberArray(event.currentTarget.value))
+                    }
+                  />
+                </label>
+              );
+            })}
+            {pointArrayParameters.map((parameter) => {
+              const value = normalizeJsonValue(properties[parameter.id], parameter.defaultValue);
+
+              return (
+                <label className="parameter-row nodrag nopan" key={parameter.id}>
+                  <div className="parameter-label-row">
+                    <span>{parameter.label}</span>
+                    <span className="parameter-badge">points</span>
+                  </div>
+                  <textarea
+                    className="parameter-textarea nodrag nopan"
+                    defaultValue={toStructuredEditorValue(value)}
+                    onBlur={(event) => {
+                      const parsed = tryParseJson(event.currentTarget.value);
+                      if (parsed !== undefined) {
+                        updateNodeParameter(id, parameter.id, parsed);
+                      }
+                    }}
+                  />
+                  <span className="parameter-hint">Edit as JSON array of point objects.</span>
+                </label>
+              );
+            })}
+            {tupleArrayParameters.map((parameter) => {
+              const value = normalizeJsonValue(properties[parameter.id], parameter.defaultValue);
+
+              return (
+                <label className="parameter-row nodrag nopan" key={parameter.id}>
+                  <div className="parameter-label-row">
+                    <span>{parameter.label}</span>
+                    <span className="parameter-badge">tuples</span>
+                  </div>
+                  <textarea
+                    className="parameter-textarea nodrag nopan"
+                    defaultValue={toStructuredEditorValue(value)}
+                    onBlur={(event) => {
+                      const parsed = tryParseJson(event.currentTarget.value);
+                      if (parsed !== undefined) {
+                        updateNodeParameter(id, parameter.id, parsed);
+                      }
+                    }}
+                  />
+                  <span className="parameter-hint">Edit as JSON array of numeric tuples.</span>
+                </label>
+              );
+            })}
+            {objectParameters.map((parameter) => {
+              const value = normalizeJsonValue(properties[parameter.id], parameter.defaultValue);
+
+              return (
+                <label className="parameter-row nodrag nopan" key={parameter.id}>
+                  <div className="parameter-label-row">
+                    <span>{parameter.label}</span>
+                    <span className="parameter-badge">{parameter.shape ?? "object"}</span>
+                  </div>
+                  <textarea
+                    className="parameter-textarea nodrag nopan"
+                    defaultValue={toStructuredEditorValue(value)}
+                    onBlur={(event) => {
+                      const parsed = tryParseJson(event.currentTarget.value);
+                      if (parsed !== undefined) {
+                        updateNodeParameter(id, parameter.id, parsed);
+                      }
+                    }}
+                  />
+                  <span className="parameter-hint">Edit structured values as JSON.</span>
+                </label>
               );
             })}
             {nonEditableParameters.map((parameter) => (
@@ -378,4 +538,43 @@ function hexToColor(hex: string): Omit<ColorValue, "alpha"> {
   const blue = Number.parseInt(sanitized.slice(4, 6), 16) / 255;
 
   return { red, green, blue };
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function normalizeNumberTuple(rawValue: unknown, fallback: unknown) {
+  const source = Array.isArray(rawValue) ? rawValue : Array.isArray(fallback) ? fallback : [];
+  return source.map((entry) => (typeof entry === "number" ? entry : 0));
+}
+
+function normalizeNumberArray(rawValue: unknown, fallback: unknown) {
+  const source = Array.isArray(rawValue) ? rawValue : Array.isArray(fallback) ? fallback : [];
+  return source.map((entry) => (typeof entry === "number" ? entry : 0));
+}
+
+function parseNumberArray(value: string) {
+  return value
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => Number(entry))
+    .filter((entry) => Number.isFinite(entry));
+}
+
+function normalizeJsonValue(rawValue: unknown, fallback: unknown) {
+  return rawValue ?? fallback;
+}
+
+function toStructuredEditorValue(value: unknown) {
+  return JSON.stringify(value ?? null, null, 2);
+}
+
+function tryParseJson(value: string) {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return undefined;
+  }
 }

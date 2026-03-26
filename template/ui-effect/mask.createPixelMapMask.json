@@ -1,0 +1,64 @@
+{
+  "type": "mask.createPixelMapMask",
+  "label": "Pixel Map Mask",
+  "category": "Mask Source",
+  "description": "Create a Mask of pixelmap.",
+  "accent": "#f472b6",
+  "inputs": [],
+  "outputs": [
+    {
+      "id": "mask",
+      "label": "Mask",
+      "kind": "mask"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "pixelMap",
+      "label": "Pixel Map",
+      "optional": false,
+      "kind": "object",
+      "defaultValue": {},
+      "shape": "image.PixelMap"
+    },
+    {
+      "id": "srcRect",
+      "label": "Src Rect",
+      "optional": false,
+      "kind": "object",
+      "defaultValue": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "shape": "common2D.Rect"
+    },
+    {
+      "id": "dstRect",
+      "label": "Dst Rect",
+      "optional": false,
+      "kind": "object",
+      "defaultValue": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "shape": "common2D.Rect"
+    },
+    {
+      "id": "fillColor",
+      "label": "Fill Color",
+      "optional": true,
+      "kind": "color",
+      "defaultValue": {
+        "red": 1,
+        "green": 1,
+        "blue": 1,
+        "alpha": 1
+      },
+      "shape": "Color"
+    }
+  ]
+}
