@@ -9,14 +9,14 @@ script = ""
 name = "Run"
 icon = "run"
 command = '''
-pnpm install
-pnpm run dev
+npm install
+npm run dev
 '''
 
 [[actions]]
 name = "build"
 icon = "tool"
 command = '''
-pnpm install
-pnpm run build
+npm install
+npm run build
 '''
