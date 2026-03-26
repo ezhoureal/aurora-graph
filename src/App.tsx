@@ -1,4 +1,4 @@
-import { useCallback, useRef, type DragEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type DragEvent } from "react";
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -17,12 +17,20 @@ const nodeTypes = {
 };
 
 const dragMimeType = "application/aurora-graph-node";
+const sidebarPanelMinHeight = 120;
 
 function App() {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const sidebarPanelsRef = useRef<HTMLDivElement | null>(null);
+  const templatesPanelRef = useRef<HTMLElement | null>(null);
+  const sidebarResizeStateRef = useRef({ startY: 0, startHeight: 0 });
   const { screenToFlowPosition } = useReactFlow();
   const { nodes, edges, onNodesChange, onEdgesChange, onConnect, addNodeFromPalette, graphJson } =
     useGraphStore();
+  const [templatesCollapsed, setTemplatesCollapsed] = useState(false);
+  const [jsonCollapsed, setJsonCollapsed] = useState(false);
+  const [templatePanelHeight, setTemplatePanelHeight] = useState(260);
+  const [isResizingSidebar, setIsResizingSidebar] = useState(false);
 
   const onDragStart = useCallback((event: DragEvent<HTMLButtonElement>, type: string) => {
     event.dataTransfer.setData(dragMimeType, type);
@@ -55,6 +63,46 @@ function App() {
     [addNodeFromPalette, screenToFlowPosition],
   );
 
+  useEffect(() => {
+    if (!isResizingSidebar) {
+      return;
+    }
+
+    const onPointerMove = (event: PointerEvent) => {
+      const container = sidebarPanelsRef.current;
+
+      if (!container) {
+        return;
+      }
+
+      const bounds = container.getBoundingClientRect();
+      const nextHeight =
+        sidebarResizeStateRef.current.startHeight + (event.clientY - sidebarResizeStateRef.current.startY);
+      const maxHeight = bounds.height - sidebarPanelMinHeight;
+      const clampedHeight = Math.max(sidebarPanelMinHeight, Math.min(maxHeight, nextHeight));
+
+      setTemplatePanelHeight(clampedHeight);
+    };
+
+    const stopResizing = () => {
+      setIsResizingSidebar(false);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+
+    document.body.style.cursor = "row-resize";
+    document.body.style.userSelect = "none";
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup", stopResizing);
+
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", stopResizing);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+  }, [isResizingSidebar]);
+
   return (
     <main className="app-shell">
       <aside className="sidebar">
@@ -66,30 +114,90 @@ function App() {
           </p>
         </div>
 
-        <div className="palette-list">
-          {templateItems.map((item) => (
+        <div className="sidebar-panels" ref={sidebarPanelsRef}>
+          <section
+            className={`sidebar-panel${templatesCollapsed ? " sidebar-panel-collapsed" : ""}`}
+            ref={templatesPanelRef}
+            style={templatesCollapsed ? undefined : { flex: `0 0 ${templatePanelHeight}px` }}
+          >
             <button
-              key={item.type}
-              className="palette-card"
-              draggable
-              onDragStart={(event) => onDragStart(event, item.type)}
-              style={{ ["--card-accent" as string]: item.accent }}
+              className="sidebar-panel-tab"
               type="button"
+              onClick={() => setTemplatesCollapsed((value) => !value)}
             >
-              <span className="palette-category">{item.category}</span>
-              <strong>{item.label}</strong>
-              <span>{item.description}</span>
+              <span>Templates</span>
+              <span className="sidebar-panel-tab-icon">{templatesCollapsed ? "+" : "-"}</span>
             </button>
-          ))}
-        </div>
 
-        <section className="graph-export">
-          <div className="graph-export-header">
-            <span className="eyebrow">Live JSON</span>
-            <p>Canonical DAG snapshot exported straight from the model layer.</p>
-          </div>
-          <pre className="graph-export-code">{graphJson}</pre>
-        </section>
+            {!templatesCollapsed ? (
+              <div className="sidebar-panel-content">
+                <div className="palette-list">
+                  {templateItems.map((item) => (
+                    <button
+                      key={item.type}
+                      className="palette-card"
+                      draggable
+                      onDragStart={(event) => onDragStart(event, item.type)}
+                      style={{ ["--card-accent" as string]: item.accent }}
+                      type="button"
+                    >
+                      <span className="palette-category">{item.category}</span>
+                      <strong>{item.label}</strong>
+                      <span>{item.description}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </section>
+
+          {!templatesCollapsed && !jsonCollapsed ? (
+            <div
+              aria-hidden="true"
+              className="sidebar-panel-resizer"
+              onPointerDown={(event) => {
+                const templatePanel = templatesPanelRef.current;
+
+                if (!templatePanel) {
+                  return;
+                }
+
+                sidebarResizeStateRef.current = {
+                  startY: event.clientY,
+                  startHeight: templatePanel.getBoundingClientRect().height,
+                };
+                setTemplatePanelHeight(templatePanel.getBoundingClientRect().height);
+                setIsResizingSidebar(true);
+              }}
+            />
+          ) : null}
+
+          <section
+            className={`sidebar-panel${jsonCollapsed ? " sidebar-panel-collapsed" : ""}`}
+            style={jsonCollapsed ? undefined : { flex: "1 1 0" }}
+          >
+            <button
+              className="sidebar-panel-tab"
+              type="button"
+              onClick={() => setJsonCollapsed((value) => !value)}
+            >
+              <span>Live JSON</span>
+              <span className="sidebar-panel-tab-icon">{jsonCollapsed ? "+" : "-"}</span>
+            </button>
+
+            {!jsonCollapsed ? (
+              <div className="sidebar-panel-content">
+                <section className="graph-export">
+                  <div className="graph-export-header">
+                    <span className="eyebrow">Live JSON</span>
+                    <p>Canonical DAG snapshot exported straight from the model layer.</p>
+                  </div>
+                  <pre className="graph-export-code">{graphJson}</pre>
+                </section>
+              </div>
+            ) : null}
+          </section>
+        </div>
       </aside>
 
       <section className="canvas-shell">
