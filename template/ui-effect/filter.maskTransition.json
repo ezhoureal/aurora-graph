@@ -1,0 +1,47 @@
+{
+  "type": "filter.maskTransition",
+  "label": "Mask Transition",
+  "category": "Filter",
+  "description": "Applies Transition with alpha mask",
+  "accent": "#38bdf8",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    },
+    {
+      "id": "alphaMask",
+      "label": "Alpha Mask",
+      "kind": "mask"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "factor",
+      "label": "Factor",
+      "optional": true,
+      "description": "- The coefficient of the mask, defaulting to 1.0f [0~1]",
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    },
+    {
+      "id": "inverse",
+      "label": "Inverse",
+      "optional": true,
+      "description": "- Transition mode, default is fasle (true, false)",
+      "kind": "boolean",
+      "defaultValue": false
+    }
+  ]
+}

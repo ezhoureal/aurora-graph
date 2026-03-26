@@ -22,7 +22,7 @@ interface GraphState {
   onEdgesChange: (changes: EdgeChange[]) => void;
   onConnect: (connection: Connection) => void;
   addNodeFromPalette: (type: string, position: XYPosition) => void;
-  updateNodeParameter: (nodeId: string, parameterId: string, value: number) => void;
+  updateNodeParameter: (nodeId: string, parameterId: string, value: unknown) => void;
 }
 
 const initialGraph = createGraph();
@@ -38,36 +38,29 @@ function syncGraph(graph: DagGraph, graphJson: string) {
   };
 }
 
-function syncGraphIfChanged(currentGraph: DagGraph, nextGraph: DagGraph, shouldExportJson: boolean) {
+function syncGraphIfChanged(currentGraph: DagGraph, nextGraph: DagGraph) {
   if (nextGraph === currentGraph) {
     return undefined;
   }
 
-  const nextGraphJson = shouldExportJson ? createGraphSnapshot(nextGraph) : createGraphSnapshot(currentGraph);
-
-  return syncGraph(nextGraph, nextGraphJson);
+  return syncGraph(nextGraph, createGraphSnapshot(nextGraph));
 }
 
 export const useGraphStore = create<GraphState>((set) => ({
   ...syncGraph(initialGraph, createGraphSnapshot(initialGraph)),
   onNodesChange: (changes) =>
     set((state) => {
-      const shouldExportJson = changes.some((change) => change.type === "remove");
-      const nextState = syncGraphIfChanged(
-        state.graph,
-        applyDagNodeChanges(state.graph, changes),
-        shouldExportJson,
-      );
+      const nextState = syncGraphIfChanged(state.graph, applyDagNodeChanges(state.graph, changes));
       return nextState ?? state;
     }),
   onEdgesChange: (changes) =>
     set((state) => {
-      const nextState = syncGraphIfChanged(state.graph, applyDagEdgeChanges(state.graph, changes), false);
+      const nextState = syncGraphIfChanged(state.graph, applyDagEdgeChanges(state.graph, changes));
       return nextState ?? state;
     }),
   onConnect: (connection) =>
     set((state) => {
-      const nextState = syncGraphIfChanged(state.graph, connectNodes(state.graph, connection), true);
+      const nextState = syncGraphIfChanged(state.graph, connectNodes(state.graph, connection));
       return nextState ?? state;
     }),
   addNodeFromPalette: (type, position) => {
@@ -94,11 +87,7 @@ export const useGraphStore = create<GraphState>((set) => ({
   },
   updateNodeParameter: (nodeId, parameterId, value) =>
     set((state) => {
-      const nextState = syncGraphIfChanged(
-        state.graph,
-        updateNodeProperty(state.graph, nodeId, parameterId, value),
-        false,
-      );
+      const nextState = syncGraphIfChanged(state.graph, updateNodeProperty(state.graph, nodeId, parameterId, value));
       return nextState ?? state;
     }),
 }));

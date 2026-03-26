@@ -2,7 +2,7 @@ import type { Connection, Edge, EdgeChange, Node, NodeChange, XYPosition } from 
 import { templateByType, type TemplateDefinition, type PortKind } from "../template/registry";
 
 export interface DagNodeProperties {
-  [propertyId: string]: number;
+  [propertyId: string]: unknown;
 }
 
 export interface DagConnectionRef {
@@ -80,37 +80,13 @@ export function createNodeRecord(
 }
 
 export function createGraph(): DagGraph {
-  const sourceDefinition = templateByType["source.image"];
-  const brightnessDefinition = templateByType["fx.brightness"];
-
-  if (!sourceDefinition || !brightnessDefinition) {
-    return {
-      nodeOrder: [],
-      edgeOrder: [],
-      nodes: {},
-      edges: {},
-    };
-  }
-
-  const source = createNodeRecord(sourceDefinition, { x: 120, y: 160 }, "node-1");
-  const brightness = createNodeRecord(brightnessDefinition, { x: 420, y: 150 }, "node-2");
-
-  const graph: DagGraph = {
-    nodeOrder: [source.id, brightness.id],
+  // Start empty now that the sidebar only exposes HarmonyOS uiEffect templates.
+  return {
+    nodeOrder: [],
     edgeOrder: [],
-    nodes: {
-      [source.id]: source,
-      [brightness.id]: brightness,
-    },
+    nodes: {},
     edges: {},
   };
-
-  return connectNodes(graph, {
-    source: source.id,
-    sourceHandle: "image",
-    target: brightness.id,
-    targetHandle: "image",
-  });
 }
 
 export function createGraphSnapshot(graph: DagGraph): string {
@@ -184,7 +160,7 @@ export function updateNodeProperty(
   graph: DagGraph,
   nodeId: string,
   propertyId: string,
-  value: number,
+  value: unknown,
 ): DagGraph {
   const node = graph.nodes[nodeId];
 

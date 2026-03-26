@@ -1,0 +1,81 @@
+{
+  "type": "filter.waterRipple",
+  "label": "Water Ripple",
+  "category": "Filter",
+  "description": "Set waterRipple effect of the Component.",
+  "accent": "#38bdf8",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "progress",
+      "label": "Progress",
+      "optional": false,
+      "description": "- Indicates the ripple progress. The value 1 indicates that ripples are displayed on all screens.",
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "id": "waveCount",
+      "label": "Wave Count",
+      "optional": false,
+      "description": "- The number of waves when the water ripples. The maximum count of waves is 3, the minimum value is 1, default is 2.",
+      "kind": "number",
+      "defaultValue": 1,
+      "min": 1,
+      "max": 3,
+      "step": 1
+    },
+    {
+      "id": "x",
+      "label": "X",
+      "optional": false,
+      "description": "- Represents the X-axis position of center point where the water ripple first appears on the screen.",
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    },
+    {
+      "id": "y",
+      "label": "Y",
+      "optional": false,
+      "description": "- Represents the Y-axis position of center point where the water ripple first appears on the screen.",
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    },
+    {
+      "id": "rippleMode",
+      "label": "Ripple Mode",
+      "optional": false,
+      "description": "- Set the mode of water ripple, 0 for mobile to desktop(Receive), 1 for mobile to desktop(Send), 2 for mobile to mobile, 3 for cross platform.",
+      "kind": "enum",
+      "options": [
+        "SMALL2MEDIUM_RECV",
+        "SMALL2MEDIUM_SEND",
+        "SMALL2SMALL",
+        "MINI_RECV"
+      ],
+      "defaultValue": "SMALL2MEDIUM_RECV"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "type": "effect.backgroundColorBlender",
+  "label": "Background Color Blender",
+  "category": "Visual Effect",
+  "description": "A backgroundColorEffect effect is added to the Component.",
+  "accent": "#22c55e",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "blender",
+      "label": "Blender",
+      "optional": false,
+      "description": "- The blender to blend backgroundColor.",
+      "kind": "object",
+      "defaultValue": {
+        "cubicRate": 0,
+        "quadraticRate": 0,
+        "linearRate": 0,
+        "degree": 0,
+        "saturation": 0,
+        "positiveCoefficient": [
+          0,
+          0,
+          0
+        ],
+        "negativeCoefficient": [
+          0,
+          0,
+          0
+        ],
+        "fraction": 0
+      },
+      "shape": "BrightnessBlender"
+    }
+  ]
+}

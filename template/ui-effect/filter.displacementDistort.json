@@ -1,0 +1,39 @@
+{
+  "type": "filter.displacementDistort",
+  "label": "Displacement Distort",
+  "category": "Filter",
+  "description": "Sets distort effect with displacement map.",
+  "accent": "#38bdf8",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    },
+    {
+      "id": "displacementMap",
+      "label": "Displacement Map",
+      "kind": "mask"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "factor",
+      "label": "Factor",
+      "optional": true,
+      "kind": "numberTuple",
+      "defaultValue": [
+        0,
+        0
+      ],
+      "shape": "[double,double]"
+    }
+  ]
+}

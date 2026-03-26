@@ -1,0 +1,68 @@
+{
+  "type": "effect.borderLight",
+  "label": "Border Light",
+  "category": "Visual Effect",
+  "description": "Sets the border light effect.",
+  "accent": "#22c55e",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "lightPosition",
+      "label": "Light Position",
+      "optional": false,
+      "kind": "point3d",
+      "defaultValue": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "shape": "common2D.Point3d"
+    },
+    {
+      "id": "lightColor",
+      "label": "Light Color",
+      "optional": false,
+      "kind": "color",
+      "defaultValue": {
+        "red": 1,
+        "green": 1,
+        "blue": 1,
+        "alpha": 1
+      },
+      "shape": "common2D.Color"
+    },
+    {
+      "id": "lightIntensity",
+      "label": "Light Intensity",
+      "optional": false,
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    },
+    {
+      "id": "borderWidth",
+      "label": "Border Width",
+      "optional": false,
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    }
+  ]
+}

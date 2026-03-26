@@ -1,37 +1,15 @@
-import sourceImage from "../../template/source.image.json";
-import brightness from "../../template/fx.brightness.json";
-import blur from "../../template/fx.blur.json";
-import scalar from "../../template/math.scalar.json";
+import type { TemplateDefinition } from "./schema";
 
-export type PortKind = "number" | "image" | "boolean";
+const templateModules = import.meta.glob("../../template/ui-effect/*.json", {
+  eager: true,
+  import: "default",
+}) as Record<string, TemplateDefinition>;
 
-export interface NumericParameter {
-  id: string;
-  label: string;
-  min: number;
-  max: number;
-  step: number;
-  defaultValue: number;
-  unit?: string;
-}
+export { type PortKind, type TemplateDefinition, type TemplateParameter } from "./schema";
 
-export interface TemplateDefinition {
-  type: string;
-  label: string;
-  category: string;
-  description: string;
-  accent: string;
-  inputs: Array<{ id: string; label: string; kind: PortKind }>;
-  outputs: Array<{ id: string; label: string; kind: PortKind }>;
-  parameters: NumericParameter[];
-}
-
-export const templateItems = [
-  sourceImage as TemplateDefinition,
-  brightness as TemplateDefinition,
-  blur as TemplateDefinition,
-  scalar as TemplateDefinition,
-];
+export const templateItems = Object.values(templateModules).sort((left, right) =>
+  left.label.localeCompare(right.label),
+);
 
 export const templateByType = Object.fromEntries(
   templateItems.map((item) => [item.type, item]),

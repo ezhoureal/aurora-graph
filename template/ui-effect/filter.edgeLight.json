@@ -1,0 +1,58 @@
+{
+  "type": "filter.edgeLight",
+  "label": "Edge Light",
+  "category": "Filter",
+  "description": "Detects and glows edges of contents.",
+  "accent": "#38bdf8",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    },
+    {
+      "id": "mask",
+      "label": "Mask",
+      "kind": "mask"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "alpha",
+      "label": "Alpha",
+      "optional": false,
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "id": "color",
+      "label": "Color",
+      "optional": true,
+      "kind": "color",
+      "defaultValue": {
+        "red": 1,
+        "green": 1,
+        "blue": 1,
+        "alpha": 1
+      },
+      "shape": "Color"
+    },
+    {
+      "id": "bloom",
+      "label": "Bloom",
+      "optional": true,
+      "kind": "boolean",
+      "defaultValue": false
+    }
+  ]
+}

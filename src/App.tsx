@@ -141,8 +141,8 @@ function App() {
                       style={{ ["--card-accent" as string]: item.accent }}
                       type="button"
                     >
-                      <span className="palette-category">{item.category}</span>
                       <strong>{item.label}</strong>
+                      <span className="palette-category">{item.category}</span>
                       <span>{item.description}</span>
                     </button>
                   ))}

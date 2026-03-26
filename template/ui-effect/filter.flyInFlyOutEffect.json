@@ -1,0 +1,46 @@
+{
+  "type": "filter.flyInFlyOutEffect",
+  "label": "Fly In Fly Out Effect",
+  "category": "Filter",
+  "description": "Set the fly in or fly out effect of the component.",
+  "accent": "#38bdf8",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "degree",
+      "label": "Degree",
+      "optional": false,
+      "description": "- set the degree of fly in or fly out effect, value range [0, 1].",
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "id": "flyMode",
+      "label": "Fly Mode",
+      "optional": false,
+      "description": "- set the location of stretching when fly in or out If the value is 0, the component keep same, else the value is 1, component are fully fly out or fly in.",
+      "kind": "enum",
+      "options": [
+        "BOTTOM",
+        "TOP"
+      ],
+      "defaultValue": "BOTTOM"
+    }
+  ]
+}

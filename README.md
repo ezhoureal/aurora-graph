@@ -6,7 +6,7 @@ A drag-and-drop design tool for visual effects, producing ready-to-run UI for Ha
 ## Architecture
 The tool is built in three layers:
 ## Layer 1: UI
-cross-platform UI that allows users to create effect node graphs -- drag and drop, make connections, adjust parameters with slider, etc. The UI is based on ReactFlow and Zustand in Typescript, and the left sidebar is populated from JSON-backed templates at startup.
+cross-platform UI that allows users to create effect node graphs -- drag and drop, make connections, adjust parameters with slider, etc. The UI is based on ReactFlow and Zustand in Typescript, and the left sidebar is populated from JSON-backed HarmonyOS effect templates at startup.
 
 ## Layer 2: Graph Model
 This is the "Source of Truth." It maintains the Directed Acyclic Graph (DAG) structure.
@@ -14,7 +14,8 @@ This is the "Source of Truth." It maintains the Directed Acyclic Graph (DAG) str
 - Responsibility: Validating connections, preventing cycles, managing parameter serialization, and handling the "Registry" of available component blocks.
 
 - Data Structure: A flat object keyed by node ID, where each node stores its metadata, type-specific property values, and explicit parent/child connection references.
-- Template Source: Preset node templates live as JSON files in `/template` and are loaded through a typed registry module on app startup.
+- Template Source: Preset node templates live as JSON files in `/template/ui-effect` and are auto-loaded through a typed registry module on app startup, including the image source node used to feed HarmonyOS effects.
+- Template Schema: HarmonyOS effect templates keep only `image` and `mask` ports. Parameter fields still support numeric, boolean, enum, tuple, point, color, and nested object data, while `mask` dependencies are modeled as input ports so users can wire separate mask nodes into effect nodes.
 - Export: The canonical DAG is serialized to JSON after structural edits (node add/remove and new connections) for inspection and downstream transpilation.
 - UI Projection: ReactFlow node and edge arrays are derived from the canonical DAG rather than being the source of truth.
 
@@ -26,3 +27,6 @@ Translate the JSON nodes and their connections into concrete ETS code that is Ha
 Run `npm install`.
 If your download gets stuck, it's usually a network issue when installing Electron. Try `ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ npm install`
 Then, refer to `package.json` to run locally.
+
+To generate HarmonyOS uiEffect templates from the SDK declaration file, run:
+`npm run generate:ui-effect-templates -- /path/to/@ohos.graphics.uiEffect.d.ts`

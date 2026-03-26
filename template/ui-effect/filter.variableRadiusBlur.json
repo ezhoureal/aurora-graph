@@ -1,0 +1,39 @@
+{
+  "type": "filter.variableRadiusBlur",
+  "label": "Variable Radius Blur",
+  "category": "Filter",
+  "description": "Sets variable radius blur effect with radius map.",
+  "accent": "#38bdf8",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    },
+    {
+      "id": "radiusMap",
+      "label": "Radius Map",
+      "kind": "mask"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "radius",
+      "label": "Radius",
+      "optional": false,
+      "description": "- the blurring radius. The larger the blurring radius, the more blurring the content, and if the value is 0, the content blurring effect is not blurring.",
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    }
+  ]
+}

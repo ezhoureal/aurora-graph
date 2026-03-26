@@ -1,0 +1,33 @@
+{
+  "type": "filter.blur",
+  "label": "Blur",
+  "category": "Filter",
+  "description": "Set blur effect of the Component.",
+  "accent": "#38bdf8",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "blurRadius",
+      "label": "Blur Radius",
+      "optional": false,
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 100,
+      "step": 0.1
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "type": "filter.maskDispersion",
+  "label": "Mask Dispersion",
+  "category": "Filter",
+  "description": "Sets dispersion effect with mask map.",
+  "accent": "#38bdf8",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    },
+    {
+      "id": "dispersionMap",
+      "label": "Dispersion Map",
+      "kind": "mask"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "alpha",
+      "label": "Alpha",
+      "optional": false,
+      "kind": "number",
+      "defaultValue": 0,
+      "min": 0,
+      "max": 1,
+      "step": 0.01
+    },
+    {
+      "id": "rFactor",
+      "label": "R Factor",
+      "optional": true,
+      "kind": "numberTuple",
+      "defaultValue": [
+        0,
+        0
+      ],
+      "shape": "[double,double]"
+    },
+    {
+      "id": "gFactor",
+      "label": "G Factor",
+      "optional": true,
+      "kind": "numberTuple",
+      "defaultValue": [
+        0,
+        0
+      ],
+      "shape": "[double,double]"
+    },
+    {
+      "id": "bFactor",
+      "label": "B Factor",
+      "optional": true,
+      "kind": "numberTuple",
+      "defaultValue": [
+        0,
+        0
+      ],
+      "shape": "[double,double]"
+    }
+  ]
+}

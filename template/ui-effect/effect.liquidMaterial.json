@@ -1,0 +1,83 @@
+{
+  "type": "effect.liquidMaterial",
+  "label": "Liquid Material",
+  "category": "Visual Effect",
+  "description": "Sets the liquid material effect.",
+  "accent": "#22c55e",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    },
+    {
+      "id": "useEffectMask",
+      "label": "Use Effect Mask",
+      "kind": "mask"
+    },
+    {
+      "id": "distortMask",
+      "label": "Distort Mask",
+      "kind": "mask"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "param",
+      "label": "Param",
+      "optional": false,
+      "description": "- the liquid material effect parameters.",
+      "kind": "object",
+      "defaultValue": {
+        "enable": false,
+        "distortProgress": 0,
+        "distortFactor": 0,
+        "rippleProgress": 0,
+        "ripplePosition": [],
+        "refractionFactor": 0,
+        "reflectionFactor": 0,
+        "materialFactor": 0,
+        "tintColor": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "shape": "LiquidMaterialEffectParam"
+    },
+    {
+      "id": "brightnessParam",
+      "label": "Brightness Param",
+      "optional": true,
+      "description": "- the background brightness params of material effect.",
+      "kind": "object",
+      "defaultValue": {
+        "rate": 0,
+        "lightUpDegree": 0,
+        "cubicCoeff": 0,
+        "quadCoeff": 0,
+        "saturation": 0,
+        "posRgb": [
+          0,
+          0,
+          0
+        ],
+        "negRgb": [
+          0,
+          0,
+          0
+        ],
+        "fraction": 0
+      },
+      "shape": "BrightnessParam"
+    }
+  ]
+}

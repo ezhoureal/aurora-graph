@@ -1,0 +1,44 @@
+{
+  "type": "filter.pixelStretch",
+  "label": "Pixel Stretch",
+  "category": "Filter",
+  "description": "Set the edge pixel stretch effect of the Component.",
+  "accent": "#38bdf8",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "stretchSizes",
+      "label": "Stretch Sizes",
+      "optional": false,
+      "kind": "numberArray",
+      "defaultValue": [],
+      "shape": "Array<double>"
+    },
+    {
+      "id": "tileMode",
+      "label": "Tile Mode",
+      "optional": false,
+      "kind": "enum",
+      "options": [
+        "CLAMP",
+        "REPEAT",
+        "MIRROR",
+        "DECAL"
+      ],
+      "defaultValue": "CLAMP"
+    }
+  ]
+}

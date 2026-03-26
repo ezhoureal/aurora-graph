@@ -1,0 +1,25 @@
+{
+  "type": "source.image",
+  "label": "Image Source",
+  "category": "Input",
+  "description": "Entry node for a remote image asset used by downstream HarmonyOS effects.",
+  "accent": "#f97316",
+  "inputs": [],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "url",
+      "label": "Image URL",
+      "kind": "string",
+      "defaultValue": "",
+      "placeholder": "https://example.com/image.png",
+      "description": "Remote image URL that provides the source content for this graph."
+    }
+  ]
+}

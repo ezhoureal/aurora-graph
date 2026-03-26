@@ -1,0 +1,52 @@
+{
+  "type": "filter.colorGradient",
+  "label": "Color Gradient",
+  "category": "Filter",
+  "description": "Sets the color gradient filter, may blend with alpha mask.",
+  "accent": "#38bdf8",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    },
+    {
+      "id": "alphaMask",
+      "label": "Alpha Mask",
+      "kind": "mask"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "colors",
+      "label": "Colors",
+      "optional": false,
+      "kind": "object",
+      "defaultValue": [],
+      "shape": "Array<Color>"
+    },
+    {
+      "id": "positions",
+      "label": "Positions",
+      "optional": false,
+      "kind": "pointArray",
+      "defaultValue": [],
+      "shape": "Array<common2D.Point>"
+    },
+    {
+      "id": "strengths",
+      "label": "Strengths",
+      "optional": false,
+      "kind": "numberArray",
+      "defaultValue": [],
+      "shape": "Array<double>"
+    }
+  ]
+}

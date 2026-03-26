@@ -1,0 +1,32 @@
+{
+  "type": "filter.bezierWarp",
+  "label": "Bezier Warp",
+  "category": "Filter",
+  "description": "Sets the deformation effect controlled by bezier curves of the component.",
+  "accent": "#38bdf8",
+  "inputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "image",
+      "label": "Image",
+      "kind": "image"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "controlPoints",
+      "label": "Control Points",
+      "optional": false,
+      "description": "- The bezier control points, 12 points needed.",
+      "kind": "pointArray",
+      "defaultValue": [],
+      "shape": "Array<common2D.Point>"
+    }
+  ]
+}
