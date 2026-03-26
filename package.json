@@ -1,0 +1,29 @@
+{
+  "name": "aurora-graph",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "node scripts/dev-electron.mjs",
+    "dev:web": "vite",
+    "build": "tsc -b && vite build",
+    "start": "electron .",
+    "build:electron": "npm run build && npm run start",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "reactflow": "^11.11.4",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "electron": "^34.5.8",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2"
+  }
+}

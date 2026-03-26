@@ -1,0 +1,342 @@
+:root {
+  color: #e2e8f0;
+  background:
+    radial-gradient(circle at top left, rgba(34, 197, 94, 0.22), transparent 26%),
+    radial-gradient(circle at top right, rgba(56, 189, 248, 0.24), transparent 28%),
+    linear-gradient(135deg, #07111f 0%, #0b1728 52%, #050913 100%);
+  font-family:
+    "Sora",
+    "Avenir Next",
+    "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem 1.25rem;
+  background: rgba(4, 10, 20, 0.78);
+  backdrop-filter: blur(18px);
+  border-right: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.sidebar-copy h1 {
+  margin: 0.35rem 0 0.5rem;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.sidebar-copy p {
+  margin: 0;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.eyebrow,
+.palette-category,
+.effect-node-category,
+.effect-node-column-label {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+
+.eyebrow {
+  color: #7dd3fc;
+}
+
+.palette-list {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.palette-card {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.9);
+  color: #f8fafc;
+  text-align: left;
+  cursor: grab;
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.palette-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--card-accent) 28%, transparent), transparent 60%);
+  pointer-events: none;
+}
+
+.palette-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(125, 211, 252, 0.45);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.32);
+}
+
+.palette-card:active {
+  cursor: grabbing;
+}
+
+.palette-card strong,
+.palette-card span {
+  position: relative;
+}
+
+.palette-card span:last-child {
+  color: #94a3b8;
+  line-height: 1.45;
+}
+
+.canvas-shell {
+  padding: 1rem;
+}
+
+.canvas-frame {
+  height: calc(100vh - 2rem);
+  overflow: hidden;
+  border: 1px solid rgba(125, 211, 252, 0.16);
+  border-radius: 28px;
+  background:
+    linear-gradient(160deg, rgba(15, 23, 42, 0.88), rgba(2, 6, 23, 0.92)),
+    linear-gradient(120deg, rgba(34, 197, 94, 0.08), transparent 42%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 30px 80px rgba(2, 6, 23, 0.45);
+}
+
+.canvas-panel {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 999px;
+  background: rgba(8, 15, 28, 0.82);
+  color: #cbd5e1;
+}
+
+.minimap {
+  background: rgba(8, 15, 28, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 18px;
+}
+
+.effect-node {
+  width: 280px;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 22px;
+  background:
+    linear-gradient(160deg, rgba(15, 23, 42, 0.96), rgba(8, 15, 28, 0.96)),
+    linear-gradient(135deg, color-mix(in srgb, var(--node-accent) 18%, transparent), transparent 70%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 40px rgba(2, 6, 23, 0.32);
+}
+
+.effect-node-selected {
+  border-color: color-mix(in srgb, var(--node-accent) 70%, white);
+}
+
+.effect-node-header {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.effect-node-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.effect-node-header p,
+.port-empty {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.effect-node-category {
+  color: color-mix(in srgb, var(--node-accent) 72%, white);
+}
+
+.effect-node-body {
+  display: grid;
+  gap: 1rem;
+}
+
+.effect-node-port-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.effect-node-column {
+  display: grid;
+  align-content: start;
+  gap: 0.7rem;
+}
+
+.effect-node-column.align-end,
+.port-row.align-end {
+  justify-items: end;
+  text-align: right;
+}
+
+.effect-node-column-label {
+  color: #64748b;
+}
+
+.effect-node-parameters {
+  display: grid;
+  gap: 0.85rem;
+  padding: 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.48);
+}
+
+.parameter-row {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.parameter-label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.parameter-value {
+  color: color-mix(in srgb, var(--node-accent) 60%, white);
+  font-variant-numeric: tabular-nums;
+}
+
+.parameter-slider {
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--node-accent);
+  cursor: pointer;
+}
+
+.parameter-slider:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--node-accent) 65%, white);
+  outline-offset: 3px;
+}
+
+.port-row {
+  position: relative;
+  min-height: 28px;
+  display: grid;
+  align-items: center;
+  padding: 0 0.9rem;
+  color: #e2e8f0;
+  font-size: 0.92rem;
+}
+
+.port {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.86);
+  background: #0f172a;
+}
+
+.port-number {
+  border-color: #facc15;
+}
+
+.port-image {
+  border-color: #38bdf8;
+}
+
+.port-boolean {
+  border-color: #22c55e;
+}
+
+.react-flow__handle-left {
+  left: -7px;
+}
+
+.react-flow__handle-right {
+  right: -7px;
+}
+
+.react-flow__controls {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  box-shadow: none;
+}
+
+.react-flow__controls button {
+  background: rgba(8, 15, 28, 0.9);
+  color: #e2e8f0;
+  border-bottom-color: rgba(148, 163, 184, 0.12);
+}
+
+.react-flow__attribution {
+  background: transparent;
+  color: #64748b;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  }
+
+  .canvas-shell {
+    padding-top: 0;
+  }
+
+  .canvas-frame {
+    height: 70vh;
+    border-radius: 0 0 28px 28px;
+  }
+}
