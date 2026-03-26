@@ -2,6 +2,8 @@
 
 A drag-and-drop design tool for visual effects, producing ready-to-run UI for HarmonyOS without any coding!
 
+<img width="1246" height="828" alt="Screenshot 2026-03-26 at 8 57 36 PM" src="https://github.com/user-attachments/assets/850c7880-6a5f-4b97-8a67-7d70b5cbe063" />
+
 
 ## Architecture
 The tool is built in three layers:
