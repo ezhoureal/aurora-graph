@@ -32,4 +32,4 @@ If your download gets stuck, it's usually a network issue when installing Electr
 Then, refer to `package.json` to run locally.
 
 To generate HarmonyOS uiEffect templates from the SDK declaration file, run:
-`npm run generate:ui-effect-templates -- /path/to/@ohos.graphics.uiEffect.d.ts`
+`node scripts/generate-ui-effect-templates.mjs /path/to/@ohos.graphics.uiEffect.d.ts`
