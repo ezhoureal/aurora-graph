@@ -1,1 +1,0 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/effectnode.tsx","./src/model/dag.ts","./src/store/usegraphstore.ts","./src/template/registry.ts","./src/template/schema.ts"],"version":"5.9.3"}
