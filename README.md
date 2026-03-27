@@ -9,7 +9,7 @@ A drag-and-drop design tool for visual effects, producing ready-to-run UI for Ha
 The tool is built in three layers:
 ## Layer 1: UI
 cross-platform UI that allows users to create effect node graphs -- drag and drop, make connections, adjust parameters with slider, etc. The UI is based on ReactFlow and Zustand in Typescript, and the left sidebar is populated from JSON-backed HarmonyOS effect templates at startup.
-Effect node parameter controls use type-specific inline layouts so compact editors such as colors and 2D/3D points stay readable inside narrow node cards.
+Effect node parameter controls use type-specific inline layouts so compact editors such as colors, 2D/3D points, and nested numeric object fields stay readable inside narrow node cards instead of falling back to raw JSON.
 
 ## Layer 2: Graph Model
 This is the "Source of Truth." It maintains the Directed Acyclic Graph (DAG) structure.
