@@ -180,9 +180,9 @@ select {
   height: 100%;
   overflow-y: auto;
   display: grid;
+  align-content: start;
   gap: 0.9rem;
-  padding-right: 0.35rem;
-  padding: 1rem 1rem 1rem 0.1rem;
+  padding: 1rem 0.8rem 1rem 1rem;
 }
 
 .graph-export {
@@ -224,11 +224,11 @@ select {
 
 .palette-card {
   position: relative;
-  overflow: hidden;
   display: grid;
-  gap: 0.5rem;
+  align-content: start;
+  gap: 0.35rem;
   width: 100%;
-  padding: 1rem;
+  padding: 0.95rem 1rem 1rem;
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: 20px;
   background: rgba(15, 23, 42, 0.9);
@@ -261,11 +261,23 @@ select {
 
 .palette-card strong,
 .palette-card span {
+  display: block;
   position: relative;
+  z-index: 1;
+}
+
+.palette-card strong {
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.palette-card .palette-category {
+  color: color-mix(in srgb, var(--card-accent) 68%, white);
 }
 
 .palette-card span:last-child {
   color: #94a3b8;
+  font-size: 0.82rem;
   line-height: 1.45;
 }
 
