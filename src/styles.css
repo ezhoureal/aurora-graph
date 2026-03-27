@@ -183,6 +183,8 @@ select {
   align-content: start;
   gap: 0.9rem;
   padding: 1rem 0.8rem 1rem 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(125, 211, 252, 0.4) rgba(8, 15, 28, 0.92);
 }
 
 .graph-export {
@@ -220,6 +222,44 @@ select {
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(125, 211, 252, 0.38) rgba(2, 6, 23, 0.95);
+}
+
+.palette-list::-webkit-scrollbar,
+.graph-export-code::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.palette-list::-webkit-scrollbar-track,
+.graph-export-code::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(8, 15, 28, 0.94));
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.08);
+}
+
+.palette-list::-webkit-scrollbar-thumb,
+.graph-export-code::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(125, 211, 252, 0.55), rgba(56, 189, 248, 0.3)) padding-box;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(8, 15, 28, 0.18);
+}
+
+.palette-list::-webkit-scrollbar-thumb:hover,
+.graph-export-code::-webkit-scrollbar-thumb:hover {
+  background:
+    linear-gradient(180deg, rgba(125, 211, 252, 0.72), rgba(56, 189, 248, 0.44)) padding-box;
+}
+
+.palette-list::-webkit-scrollbar-corner,
+.graph-export-code::-webkit-scrollbar-corner {
+  background: rgba(2, 6, 23, 0.95);
 }
 
 .palette-card {
