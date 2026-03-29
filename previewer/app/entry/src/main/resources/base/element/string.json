@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "Previewer module"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "Previewer ability"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Previewer"
+    }
+  ]
+}

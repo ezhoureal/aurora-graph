@@ -1,0 +1,10 @@
+{
+  "name": "@aurora-graph/previewer-workflow",
+  "private": true,
+  "scripts": {
+    "setup": "node ./scripts/install-archive.mjs",
+    "build": "node ./scripts/build-hap.mjs",
+    "preview": "node ./scripts/sync-main.mjs && node ./scripts/build-hap.mjs && node ./scripts/run-previewer.mjs",
+    "clean": "rm -rf app/entry/build app/generated app/oh_modules app/.hvigor"
+  }
+}
